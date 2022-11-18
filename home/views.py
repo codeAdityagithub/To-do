@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from home.models import AllTasks
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user_model
-
+from django.contrib import messages
 #password is asdfaggg
 
 # Create your views here.
@@ -65,9 +65,11 @@ def loginUser(request):
         if user is not None:
             # A backend authenticated the credentials
             login(request, user)
+            # messages.success(request, 'Welcome ')
             return redirect('/')
         else:
             # No backend authenticated the credentials
+            messages.error(request, 'Incorrect Username or Password')
             return render(request, 'login.html')
 
     return render(request, 'login.html')
@@ -75,6 +77,9 @@ def loginUser(request):
 def logoutuser(request):
 
     logout(request)
+    system_messages = messages.get_messages(request)
+    for message in system_messages:
+        pass
     return redirect('/login')
 
 def signup(request):
